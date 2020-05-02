@@ -80,10 +80,10 @@ function PassList() {
 		dataType: "json",
 		method: "POST",
 		contentType: "application/json",
-		beforeSend: function (xhr) {
+		beforeSend: function(xhr) {
 			xhr.setRequestHeader("Authorization", "Bearer " + AccessToken);
 		},
-	data: JSON.stringify(Params)
+		data: JSON.stringify(Params)
 	}).done(function(data) {
 		getshorturl = 1;
 		document.getElementById("ShareList").innerHTML = "The URL to share the list:<br /><span class=\"Red01\">" + data.link + "</span>";
