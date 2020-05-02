@@ -45,24 +45,6 @@ var MyItems = {
 var ShoppingList = [];
 
 
-/* ———————————————————————————	COMMENTED OUT, Week 14: ADDED PassList()
-
-function PassList() {
-	
-	//	Week 14: GRABS LOCATION HREF INFO FOR URL
-	//	var URL = "https://rvclist.github.io/rvclist14/index.html?List=" + ShoppingList;
-	var URL = location.href + "?List=" + ShoppingList;
-
-	//	Week 14: add link to ShareList id
-	document.getElementById("ShareList").innerHTML =	"The URL to share the list:<br /><span class=\"Red01\">" +
-								URL + "</span>";
-	//	Copy URL
-	CopyToClipBoard(URL);
-}
-
-———————————————————————————	END COMMENTED OUT	*/
-
-
 // —————————	Week 15: v4.1 ShareList via bitly api
 
 function PassList() {
