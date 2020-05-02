@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+
+Curt Dunmire
+Spring 2020
+Web233 Javascript
+Date: 05/01/20
+Assignment #15
+
+-->
+<head>
+<meta charset="UTF-8">
+<title>Week 15: Web233 Assignment, e-Shopper App • Curt Dunmire</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="shopping cart">
+<meta name="author" content="Curt Dunmire">
+
+<link rel="stylesheet" href="style.css">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<div id="Wrapper">
+<h1>e-Shopper: List Tracker</h1>
+
+<form onsubmit="return false;">
+<span class="InputName">Item:</span><input type="text" id="Item" name="Item" 
+onkeydown="if (event.keyCode == 13) { AddShoppingList(Item.value); }" 
+maxlength="18" placeholder="enter item (18 characters max.)" />
+<input class="button" name="submit" id="BtnSubmit" type="button" value="+Add" onclick="AddShoppingList(Item.value)" />
+</form>
+
+<p id="MyList"></p>
+<p id="MyCart"></p>
+
+<p id="ShareList"></p>
+
+<div class="CtrAbout">
+<p id="ShareButton"></p>
+<p id="AboutButton"><input class="button" id="About" type="button" 
+value="&bull;&bull; About &bull;&bull;" onclick="About()" /></p>
+</div>
+
+<p class="DateControl"><span class="DateControl2" id="Date"></span></p>
+
+<footer><span class="NoBr">Week 15: Web233 Assignment</span> <span class="SqBull">&#9724;</span>
+<span class="NoBr">Assignment #15, e-Shopper App</span>
+<br class="FootBrk"><span class="NoBr">Curt Dunmire</span></footer>
+</div>
+
+</body>
+</html>
+
