@@ -62,7 +62,7 @@ function PassList() {
 		dataType: "json",
 		method: "POST",
 		contentType: "application/json",
-		beforeSend: function(xhr) {
+		beforeSend: function (xhr) {
 			xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
 		},
 		data: JSON.stringify(params)
