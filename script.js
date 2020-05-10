@@ -1,324 +1,448 @@
-//v3.4 Add popup describing app when visitors load webpage the first time
-window.onload = function() {
-    alert("Welcome to 'Shopping List' App!\n\nCreated by Rock Valley College\n**Javascript(Web233) Students**\n\nQuestions?\nemail Professor Chuck Konkol\nc.konkol@rockvalleycollege.edu\n\nRegister @ RockValleyCollege.edu");
-    populateshoppinglistonload();
-    displayShoppinglists();
-    clearFocus();
-};
 
-//v 4.0 save / get array via cookies
-//v 4.0 read cookie on load and display
-
-//v4.1 get values via URL
-function get(name){
-    var url = window.location.search;
-    var num = url.search(name);
-    var namel = name.length;
-    var frontlength = namel+num+1; //length of everything before the value
-    var front = url.substring(0, frontlength);
-    url = url.replace(front, "");
-    num = url.search("&");
-    if(num>=0) return url.substr(0,num);
-    if(num<0)  return url;
-}
-//v4.1 ShareList via bitly api
-function passlist()
-{
- var url = "https://webman2020.github.io/week15/index.html?list="+ shoppinglist;
-    var accessToken = "9b581ed4b140975008856f05f396a50dba9689ae";
-
-    var params = {
-        "long_url" : url           
-    };
-
-    $.ajax({
-        url: "https://api-ssl.bitly.com/v4/shorten",
-        cache: false,
-        dataType: "json",
-        method: "POST",
-        contentType: "application/json",
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
-        },
-        data: JSON.stringify(params)
-	}).done(function(data) {
-		getshorturl = 1;
-		document.getElementById("sharelist").innerHTML = "The URL to share the list:\n" + data.link;
-		copyToClipboard(data.link);
-	}).fail(function(data) {
-		document.getElementById("sharelist").innerHTML = "The URL to share the list:\n" + url;
-		copyToClipboard(URL);
-	});
-}
-//vFinal share function
-function share()
-{
-   passlist();
-}
-//Copy URL 
-function copyToClipboard(text) {
-  var passbyurl = document.createElement("textarea");
-  passbyurl.value = text;
-  document.body.appendChild(passbyurl);
-  passbyurl.focus();
-  passbyurl.select();
-  document.execCommand("copy");
-  document.body.removeChild(passbyurl);
-  alert("URL has been copied. Ready to share: " + text);
-  //window.prompt("Copy & Share List!", text);
-    
-}
-
-function about()
-{
-    alert("Welcome to 'Shopping List' App!\n\nCreated by Rock Valley College\n**Javascript(Web233) Students**\n\nQuestions?\nemail Professor Chuck Konkol\nc.konkol@rockvalleycollege.edu\n\nRegister @ RockValleyCollege.edu");
-    
-}
-//read cookie and return
-function readCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-    }
-    return null;
-}
-
-//v. 4.0remove and format cookie
-function remove_unwanted(str) {  
-    
-  if ((str===null) || (str===''))  
-       return false;  
- else  
-   str = str.toString();
-    //clean space
-   str = str.replace(/%20/g, " ");
-    //clean !
-    str = str.replace(/%21/g, "!");
-   str = str.replace(/%24/g, "$"); 
-   str = str.replace(/%7C/g, " | ");
-  return str.replace(/[^\x20-\x7E]/g, '');  
-}  
+// Curt Dunmire
+// Spring 2020
+// Web233 Javascript
+// Date: 05/01/20
+// Assignment #15
 
 
-//v 4.0 save cookie
-function savecookie()
-{
-  delete_cookie('konkollist');
-   var date = new Date();
-   //keeps for a year
-    date.setTime(date.getTime() + Number(365) * 3600 * 1000);
-   document.cookie = 'konkollist' + "=" + escape(shoppinglist.join(',')) + "; path=/;expires = " + date.toGMTString();
+
+// ——————————————————————————————————————————————————————
+// PUT DATE AFTER PAGE LOAD
+
+window.onload =		WhenLoad;
+function WhenLoad()	{
+	tt = setTimeout("PutDate()", 1000);
+
+	//	v4.0 save cookie
+	//	v4.0 read cookie when page loads and displays
+
+	About();
+	PopulateShoppingListonload();
+	DisplayShoppingLists();
+	ttt = setTimeout("ClearFocus()", 1500);
 }
 
 
-//v 4.0 delete cookie
-function delete_cookie(name) {
-  document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-}
+// ——————————————————————————————————————————————————————
+// CLICKING ABOUT BUTTON LAUNCHES ALERT ABOUT APP
 
-
-function populateshoppinglistonload()
-{
-  shoppinglist = [];
-  addtocart = [];
-  //load cookie into array
-  var y = readCookie('konkollist');
-  //remove unwanted chars and format
-  y = remove_unwanted(y); 
-  //spit array by comma %2C
-  
-   //v 4.1 get URL
-  var geturllistvalue = get("list");
-    if (geturllistvalue) {
-        geturllistvalue = remove_unwanted(geturllistvalue);
-      geturllistvalue = geturllistvalue.split(',');
-      shoppinglist = geturllistvalue;
-  }else if (y){
-       y = y.split('%2C');
-      shoppinglist = y;
-  }
+function About() {
+	AboutText =	"Thanks for using the \"e-Shopper: List Tracker\" App!\n\n" +
+			"Created by: Curt Dunmire\n" +
+			"Enrolled in: JavaScript Class (Web233), yr. 2020\n\n" +
+			"Questions about the JavaScript class can be directed to\n" +
+			"Professor Chuck Konkol at: c.konkol@rockvalleycollege.edu\n\n" +
+			"Register for classes @ RockValleyCollege.edu\n\n";
+	alert(AboutText);
 }
 
 
 var MyItems = {
-  name:"",
-  price:""
+	Name:"", Price:""
 };
 
-var shoppinglist = [];
+var ShoppingList = [];
 
-//v 3.1 addtocart empty array
-var addtocart = [];
 
-//v3.1
-function changeShoppinglist(position) {
-  //document.getElementById("MyList").innerHTML = shoppinglist[position];
-  var arrays = shoppinglist[position];
-  arrays = arrays.split(",");
-    var e1 = arrays[0];
-   var e2 = arrays[1];
- var ReplacedAmount = e2.replace(/\$/g,'');
-  var eitem = prompt("Please enter new item", e1);
-  var ecost = prompt("Please enter your name", ReplacedAmount);
-  shoppinglist[position] = eitem + "," + '$' + ecost;
-  displayShoppinglists();
-  displayShoppingCart();
-  //v 4.0 save cookie
-  savecookie();
-}
+// —————————	Week 15: v4.1 GET() FUNCTION NEEDED TO BE ADDED, WAS NOT IN ASSIGNMENT
 
-//v3.1
-function changeShoppingCart(position) {
-  document.getElementById("MyCart").innerHTML = shoppinglist[position];
-  var arrays = addtocart[position];
-  arrays = arrays.split(",");
-    var e1 = arrays[0];
-   var e2 = arrays[1];
- var ReplacedAmount = e2.replace(/\$/g,'');
-  var eitem = prompt("Please enter new item", e1);
-  var ecost = prompt("Please enter your name", ReplacedAmount);
-  addtocart[position] = eitem + "," + '$' + ecost;
-  displayShoppinglists();
-  displayShoppingCart();
-  //v 4.0 save cookie
-   savecookie();
-}
+function Get(Name) {
+	var URL = window.location.search;
+	var Num = URL.search(Name);
+	var NameL = Name.length;
+	var FrontLength = NameL + Num + 1; //length of everything before the value
+	var Front = URL.substring(0, FrontLength);
+	URL = URL.replace(Front, "");
+	Num = URL.search("&");
 
-//v3.1 
-function addbacktoshoppinglist(item,num) {
-  //push to deleteShoppingCar
-   deleteShoppingCart(num);
-  shoppinglist.push(item);
-  //display shoppinglist
-  displayShoppinglists();
-//v3.1 display displayShoppingCart() 
-  displayShoppingCart(); 
-  clearFocus();
-  //v 4.0 save cookie
-   savecookie();
-}
-
-//v 3.1 Update function addShoppinglist by adding objects
-function addtoshopcart(item, num) {
-    document.getElementById("sharelist").innerHTML = ' ';
-    deleteShoppinglists(num);
-    addtocart.push(item);
-  //display shoppinglist
-  displayShoppinglists();
-//v3.1 display displayShoppingCart() 
-  displayShoppingCart(); 
-  //Clear
-  clearFocus();
-  //v 4.0 save cookie
-   savecookie();
-}
-
-//v 3.1 Update function addShoppinglist by adding objects
-function addShoppinglist(item) {
-  //v 3.0 declare variable for groc string
-  //push to shoppinglist
-  if (item != "")
-  {
-  document.getElementById("sharelist").innerHTML = ' ';
-  shoppinglist.push(item);
-  //display shoppinglist
-  displayShoppinglists();
-//v3.1 display displayShoppingCart() 
-  displayShoppingCart(); 
-  clearFocus();
-  //v 4.0 save cookie
-  savecookie();
-  }else
-  {
-  alert("Item Description Required: Please enter now :)");
-  clearFocus();
-  }
-}
-
-function clearFocus()
-{
-  document.getElementById("item").value = "";
- //  document.getElementById("cost").value = "";
-  document.getElementById("item").focus();
+	if (Num >= 0)	return URL.substr(0, Num);
+	if (Num < 0)	return URL;
 }
 
 
-//v 3.1: update function displayShoppinglists() to add to cart 
-function displayShoppinglists() {
-document.getElementById("MyList").innerHTML = '';
-var TheList = "";
-var TheRow = "";
-var arrayLength = shoppinglist.length;
-for (var i = 0; i < shoppinglist.length; i++) {
-  //v 3.1 change button name to btndelete
-var btndelete =  ' <input class="button" id="remove" name="delete" type="button" value="Remove" onclick="deleteShoppinglists(' + i + ')" />';
-var btnupdate =  ' <input class="button" name="edit" type="button" value="Edit Item" onclick="changeShoppinglist(' + i + ')" />';
-//v 3.1 add edit button using below i index & name it btnpdate
-var arrays = shoppinglist[i];
-arrays = "'"+arrays+"'";
-var btnaddcart =  '<input name="add" type="checkbox" id="adds" value="Add to Shopping Cart" onclick="addtoshopcart('+arrays+','+ i +')" />';
-var btnsharelist = '<input class="button" id="shares" name="shares" type="submit" value="Share Shopping List" onclick="share()" />';
-TheRow = '<li>' + shoppinglist[i] + btndelete + ' '  + btnaddcart + '</li>';
-TheList += TheRow;
-}
-//v3.1 add Title
-if (arrayLength > 0)
-{
-  document.getElementById("MyList").innerHTML = '<ul>' + TheList + '</ul>';
-  document.getElementById("sharebutton").innerHTML = btnsharelist;
-}else
-{
-  document.getElementById("MyList").innerHTML = ' ';
-  document.getElementById("sharebutton").innerHTML = ' ';
-    document.getElementById("sharelist").innerHTML = ' ';
-}
+// —————————	Week 15: v4.1 ShareList via bitly api
+
+function PassList() {
+	//	replace YOURGITHUBURL with your Github repo URL example: Konkollist.github.io
+	var URL = "https://webman2020.github.io/week15/index.html?List=" + ShoppingList;
+
+	//	replace with your NEW Bit.ly TOKEN
+	var accessToken = "9b581ed4b140975008856f05f396a50dba9689ae";
+
+	var params = { "long_url" : URL };
+
+	$.ajax({
+		URL: "https://api-ssl.bitly.com/v4/shorten",
+		cache: false,
+		dataType: "json",
+		method: "POST",
+		contentType: "application/json",
+		beforeSend: function (xhr) {
+			xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
+		},
+		data: JSON.stringify(params)
+	}).done(function(data) {
+		getshorturl = 1;
+		document.getElementById("ShareList").innerHTML = "The URL to share the list:<br /><span class=\"Red01\">" + data.link + "</span>";
+		CopyToClipBoard(data.link);
+	}).fail(function(data) {
+		document.getElementById("ShareList").innerHTML = "The URL to share the list:<br /><span class=\"Red01\">" + URL + "</span>";
+		CopyToClipBoard(URL);
+	});
 }
 
-//v3.1
-function displayShoppingCart() {
-document.getElementById("MyCart").innerHTML = ''
-var TheList = "";
-var TheRow = "";
-var arrayLength = addtocart.length;
-for (var i = 0; i < arrayLength; i++) {
-  //v 3.1 change button name to btndelete
-var btndelete =  ' <input class="button" id="remove" name="delete" type="button" value="Remove" onclick="deleteShoppingCart(' + i + ')" />';
-//v 3.1 add edit button using below i index & name it btnpdate
-var btnupdate =  ' <input class="button" name="edit" type="button" value="Edit Item" onclick="changeShoppingCart(' + i + ')" />';
-var arrays = addtocart[i];
-arrays = "'"+arrays+"'";
-//v 3.1 add edit button using below i index & name it btnpdate
-var btnaddlist =  '<input name="add" type="checkbox" id="adds" value="Add to Shopping List" onclick="addbacktoshoppinglist('+arrays+',' + i + ')" checked="checked"/>';
-TheRow =  "<li>" + addtocart[i] + btndelete + ' ' +  ' ' + btnaddlist + '</li>';
-TheList += TheRow;
-}
-if (arrayLength > 0)
-{
-  document.getElementById("labels").innerHTML = 'Purchased';
-  document.getElementById("MyCart").innerHTML = '<ul>' + TheList + '</ul>';
-}else{
-  document.getElementById("labels").innerHTML = '';
-  document.getElementById("MyCart").innerHTML = '';
-    
-}
+
+// —————————	Week 14: Final Share function
+
+function Share() { PassList(); }
+
+
+// —————————	Week 14: ADDED Copy URL FUNCTION
+
+function CopyToClipBoard(Text) {
+	var PassByURL = document.createElement("textarea");
+	PassByURL.value = Text;
+	document.body.appendChild(PassByURL);
+	PassByURL.focus();
+	PassByURL.select();
+	document.execCommand("copy");
+	document.body.removeChild(PassByURL);
+
+	alert("URL has been copied. Share the URL:\n" + Text + "\n\n");
+
+	//	window.prompt("Copy & share the list!", Text);
 }
 
-//v3.1
-function deleteShoppinglists(position) {
-  document.getElementById("sharelist").innerHTML = ' ';
-  shoppinglist.splice(position, 1);
-  displayShoppinglists();
-  displayShoppingCart();
-   //v 4.0 save cookie
-  savecookie();
+
+// —————————	v3.1 AddToCart empty array
+
+var AddToCart = [];
+
+
+// —————————	v4.0 save cookie
+
+function SaveCookie() {
+	DeleteCookie("DunmireShopList");
+	var date = new Date();
+
+	//	keeps for a year
+	date.setTime(date.getTime() + Number(365) * 3600 * 1000);
+	document.cookie = "DunmireShopList=" + escape(ShoppingList.join(",")) + "; path=/; expires=" + date.toGMTString();
 }
-//v3.1
-function deleteShoppingCart(position) {
-  document.getElementById("sharelist").innerHTML = ' ';
-  addtocart.splice(position, 1);
-  displayShoppinglists();
-  displayShoppingCart();
+
+
+// —————————	v4.0 read cookie and return
+
+function ReadCookie(Name) {
+	var NameEQ = Name + "=";
+	var ca = document.cookie.split(";");
+	for(var i = 0; i < ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0)==" ") { c = c.substring(1, c.length); }
+		if (c.indexOf(NameEQ) == 0) { return c.substring(NameEQ.length, c.length); }
+	}
+	return null;
 }
+
+
+// —————————	v4.0 delete cookie
+
+function DeleteCookie(Name) {
+	document.cookie = Name + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+}
+
+
+// —————————	v4.0 PopulateShoppingListonload
+
+function PopulateShoppingListonload() {
+	ShoppingList = [];
+	AddToCart = [];
+
+	//	load cookie into array
+	var y = ReadCookie("DunmireShopList");
+
+	//	remove unwanted chars and format
+	y = RemoveUnwanted(y); 
+
+	//	spit array by comma %2C
+	var GetURLListValue = Get("List");
+
+	if (GetURLListValue) {
+		GetURLListValue = remove_unwanted(GetURLListValue);
+		GetURLListValue = GetURLListValue.split(',');
+		ShoppingList = GetURLListValue;
+	} else if (y) {
+		y = y.split('%2C');
+		ShoppingList = y;
+	}
+}
+
+
+// —————————	v4.0 remove and format cookie
+
+function RemoveUnwanted(str) {
+	if ((str === null) || (str === "")) {
+		return false;
+	} else {
+		str = str.toString();
+
+		/*	HAD TO COMMENT OUT THE LINE BELOW THAT REMOVES SPACES BECAUSE
+			I HAVE SPACES REMOVED IN FUNCTION AddShoppingList()
+
+			str = str.replace(/%20/g, "");		*/
+
+		str = str.replace(/%24/g, "$"); 
+		str = str.replace(/%7C/g, " | ");
+		return str.replace(/[^\x20-\x7E]/g, "");
+	}
+}
+
+
+// —————————	v3.1
+
+function ChangeShoppingList(Position) {
+	var Arrays = ShoppingList[Position];
+	Arrays = Arrays.split(",");
+	var e1 = Arrays[0];
+	var e2 = Arrays[1];
+	var ReplacedAmount = e2.replace(/\$/g,'');
+	var eItem = prompt("Please enter new item", e1);
+	var eCost = prompt("Please enter new item cost", ReplacedAmount);
+
+	ShoppingList[Position] = eItem + "," + "$" + eCost;
+	DisplayShoppingLists();
+	DisplayShoppingCart();
+
+	//	v4.0 save cookie
+	SaveCookie();
+}
+
+
+// —————————	v3.1
+
+function ChangeShoppingCart(Position) {
+	document.getElementById("MyCart").innerHTML = ShoppingList[Position];
+	var Arrays = AddToCart[Position];
+	Arrays = Arrays.split(",");
+	var e1 = Arrays[0];
+	var e2 = Arrays[1];
+	var ReplacedAmount = e2.replace(/\$/g,"");
+	var eItem = prompt("Please enter new item", e1);
+	var eCost = prompt("Please enter new item cost", ReplacedAmount);
+	AddToCart[Position] = eItem + "," + "$" + eCost;
+	DisplayShoppingLists();
+	DisplayShoppingCart();
+
+	//	v4.0 save cookie
+	SaveCookie();
+}
+
+
+// —————————	v3.1 
+
+function AddBackToShoppingList(Item, Num) {
+	//	push to deleteShoppingCar
+	DeleteShoppingCart(Num);
+	ShoppingList.push(Item);
+
+	//	display ShoppingList
+	DisplayShoppingLists();
+
+	//	display DisplayShoppingCart() 
+	DisplayShoppingCart(); 
+	ClearFocus();
+	
+	//	v4.0 save cookie
+	SaveCookie();
+}
+
+
+// —————————	v3.1 Update function AddToShopCart by adding objects
+
+function AddToShopCart(Item, Num) {
+	DeleteShoppingLists(Num);
+	AddToCart.push(Item);
+
+	//	display shoppinglist
+	DisplayShoppingLists();
+
+	//	display DisplayShoppingCart() 
+	DisplayShoppingCart(); 
+
+	//	Clear
+	ClearFocus();
+
+	//	v4.0 save cookie
+	SaveCookie();
+}
+
+
+// —————————	v3.1 Update function AddShoppingList by adding objects
+
+function AddShoppingList(Item) {
+	//	Checks for empty values or just whitespaces (no alphanumeric characters)
+	//	If no alphanumeric characters are entered, item is not added and alert is shown.
+
+	var CheckWhiteSpace = new RegExp(/^\s+$/);
+
+	if (Item.length == 0 || CheckWhiteSpace.test(Item)) {
+		alert("You did not add a valid item.\nItem not added to list.\nPlease try again.\n\n");
+		ClearFocus();
+		return false;
+	} else {
+		//	Replace functions remove extra unneeded whitespaces in added shopping list item
+		Item = Item.replace(/^\s+|\s+$/g, "");
+		Item = Item.replace(/\s{2,}/g, " ");
+	}
+
+/*	-----------------------BEGIN SECTION COMMENTED OUT
+
+	if (Cost.length == 0 || CheckWhiteSpace.test(Cost)) {
+		alert("You did not add a valid cost.\nCost not added to list.\nPlease try again.\n\n");
+		return false;
+	} else {
+		//	Replace functions remove extra unneeded whitespaces in added shopping list item
+		Cost = Cost.replace(/^\s+|\s+$/g, "");
+		Cost = Cost.replace(/\s{2,}/g, " ");
+	}
+
+---------------------------END SECTION COMMENTED OUT	*/
+
+	//	push to ShoppingList
+	ShoppingList.push(Item);
+
+	//	display ShoppingList
+	DisplayShoppingLists();
+
+	//	v3.1 display DisplayShoppingCart() 
+	DisplayShoppingCart(); 
+	ClearFocus();
+
+	//	v4.0 save cookie
+	SaveCookie();
+}
+
+
+function ClearFocus() {
+	document.getElementById("Item").value = "";
+	//	document.getElementById("Cost").value = "";
+	document.getElementById("Item").focus();
+}
+
+
+// —————————	v3.1: update function DisplayShoppingLists() to add to cart 
+
+function DisplayShoppingLists() {
+	var TheList = "";
+	var TheRow = "";
+	var ArrayLength = ShoppingList.length;
+
+	for (var i = 0; i < ShoppingList.length; i++) {
+		//	v3.1 change button name to BtnDelete
+		var BtnDelete =	' <input class="button" id="remove" name="delete" type="button" value="Remove Item" onclick="DeleteShoppingLists(' + i + ')" />';
+		var BtnUpdate =	' <input class="button" name="edit" type="button" value="Edit Item" onclick="ChangeShoppingList(' + i + ')" />';
+
+		//	Week 14: FOR ARRAY VARIABLE "ShoppingList," CHANGE ASCII SPACE CHARACTER TO PLAIN WHITE SPACE
+		ShoppingList[i] = ShoppingList[i].replace(/\%20/g, " ");
+
+		var Arrays = ShoppingList[i];
+		Arrays = "'" + Arrays + "'";
+
+		var BtnAddcart = '<input name="add" type="checkbox" id="adds" value="Add to Shopping Cart" onclick="AddToShopCart(' + Arrays + ',' + i + ')" />';
+
+		//	Week 14: Add Share Button
+		var BtnShareList = '<input class="button" id="shares" name="shares" type="submit" value="Share Shopping List" onclick="Share()" />' ;
+
+		TheRow = "<li>" + ShoppingList[i] + BtnDelete + " " + BtnAddcart + "</li>";
+		TheList += TheRow;
+	}
+
+	//	v3.1 add Title
+	if (ArrayLength > 0) {
+		MyList.style.paddingTop = "20px";
+		document.getElementById("MyList").innerHTML = "Shopping List:<br><ul>" + TheList + "</ul>";
+
+		//	Week 14: Add Share Button if arraylist contains values
+		document.getElementById("ShareButton").innerHTML = BtnShareList;
+	} else {
+		MyList.style.paddingTop = "0";
+		document.getElementById("MyList").innerHTML = "";
+
+		//	Week 14: Remove Share Button and ShareList if arraylist contains values
+		document.getElementById("ShareButton").innerHTML = "";
+		document.getElementById("ShareList").innerHTML = "";
+	}
+}
+
+
+// —————————	v3.1
+
+function DisplayShoppingCart() {
+	var TheList = "";
+	var TheRow = "";
+	var ArrayLength = AddToCart.length;
+
+	for (var i = 0; i < ArrayLength; i++) {
+		//	v 3.1 change button name to BtnDelete
+		var BtnDelete =	' <input class="button" id="remove" name="delete" type="button" value="Remove Item" onclick="DeleteShoppingCart(' + i + ')" />';
+
+		//	v3.1 add edit button using below i index & name it btnpdate
+		var BtnUpdate =	' <input class="button" name="edit" type="button" value="Edit Item" onclick="ChangeShoppingCart(' + i + ')" />';
+		var Arrays = AddToCart[i];
+		Arrays = "'" + Arrays + "'";
+
+		//	v3.1 add edit button using below i index & name it btnpdate
+		var btnaddlist = '<input name="add" type="checkbox" id="adds" value="Add to Shopping List" onclick="AddBackToShoppingList(' + Arrays + ',' + i + ')" checked="checked"/>';
+		TheRow = "<li>" + AddToCart[i] + BtnDelete + " " + btnaddlist + "</li>";
+		TheList += TheRow;
+	}
+
+	if (ArrayLength > 0) {
+		MyCart.style.paddingTop = "20px";
+		document.getElementById("MyCart").innerHTML = "Items Purchased:<ul>" + TheList + "</ul>";
+	} else {
+		MyCart.style.paddingTop = "0";
+		document.getElementById("MyCart").innerHTML = "";
+	}
+}
+
+
+// —————————	v3.1
+
+function DeleteShoppingLists(Position) {
+	ShoppingList.splice(Position, 1);
+	DisplayShoppingLists();
+	DisplayShoppingCart();
+
+	//	v4.0 save cookie
+	SaveCookie();
+}
+
+
+// —————————	v3.1
+
+function DeleteShoppingCart(Position) {
+	AddToCart.splice(Position, 1);
+	DisplayShoppingLists();
+	DisplayShoppingCart();
+
+	//	v4.0 save cookie
+	SaveCookie();
+}
+
+
+
+
+
+// ——————————————————————————————————————————————————————
+// v2.1: DISPLAY CURRENT DATE (using document ID 'Date'):
+
+function PutDate() {
+	var d = new Date();
+	var n = d.toLocaleDateString();
+	document.getElementById("Date").innerHTML = "Current date: <span class=\"Hilite\">" + n + "</span>";
+}
+
+
+
