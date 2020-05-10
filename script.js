@@ -65,10 +65,10 @@ function Get(Name) {
 
 function PassList() {
 	//	replace YOURGITHUBURL with your Github repo URL example: Konkollist.github.io
-	var url = "https://webman2020.github.io/week15/index.html?List=" + ShoppingList;
+	var url = "https://webman2020.github.io/week15/index.html?list=" + ShoppingList;
 
 	//	replace with your NEW Bit.ly TOKEN
-	var AccessToken = "9b581ed4b140975008856f05f396a50dba9689ae";
+	var accessToken = "9b581ed4b140975008856f05f396a50dba9689ae";
 
 	var params = { "long_url" : url };
 
@@ -79,7 +79,7 @@ function PassList() {
 		method: "POST",
 		contentType: "application/json",
 		beforeSend: function (xhr) {
-			xhr.setRequestHeader("Authorization", "Bearer " + AccessToken);
+			xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
 		},
 		data: JSON.stringify(params)
 	}).done(function(data) {
@@ -166,7 +166,7 @@ function PopulateShoppingListonload() {
 	y = RemoveUnwanted(y); 
 
 	//	v4.1 get URL
-	var GetURLListValue = Get("List");
+	var GetURLListValue = Get("list");
 
 	if (GetURLListValue) {
 		GetURLListValue = RemoveUnwanted(GetURLListValue);
@@ -394,8 +394,8 @@ function DisplayShoppingCart() {
 		Arrays = "'" + Arrays + "'";
 
 		//	v3.1 add edit button using below i index & name it btnpdate
-		var btnaddlist = '<input name="add" type="checkbox" id="adds" value="Add to Shopping List" onclick="AddBackToShoppingList(' + Arrays + ',' + i + ')" checked="checked"/>';
-		TheRow = "<li>" + AddToCart[i] + BtnDelete + " " + btnaddlist + "</li>";
+		var BtnAddList = '<input name="add" type="checkbox" id="adds" value="Add to Shopping List" onclick="AddBackToShoppingList(' + Arrays + ',' + i + ')" checked="checked"/>';
+		TheRow = "<li>" + AddToCart[i] + BtnDelete + " " + BtnAddList + "</li>";
 		TheList += TheRow;
 	}
 
