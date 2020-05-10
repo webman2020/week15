@@ -48,16 +48,16 @@ var ShoppingList = [];
 // —————————	Week 15: v4.1 GET() FUNCTION NEEDED TO BE ADDED, WAS NOT IN ASSIGNMENT
 
 function Get(Name) {
-	var URL = window.location.search;
-	var Num = URL.search(Name);
+	var url = window.location.search;
+	var Num = url.search(Name);
 	var NameL = Name.length;
 	var FrontLength = NameL + Num + 1; //length of everything before the value
-	var Front = URL.substring(0, FrontLength);
-	URL = URL.replace(Front, "");
-	Num = URL.search("&");
+	var Front = url.substring(0, FrontLength);
+	url = url.replace(Front, "");
+	Num = url.search("&");
 
-	if (Num >= 0)	return URL.substr(0, Num);
-	if (Num < 0)	return URL;
+	if (Num >= 0)	return url.substr(0, Num);
+	if (Num < 0)	return url;
 }
 
 
@@ -65,21 +65,21 @@ function Get(Name) {
 
 function PassList() {
 	//	replace YOURGITHUBURL with your Github repo URL example: Konkollist.github.io
-	var URL = "https://webman2020.github.io/week15/index.html?List=" + ShoppingList;
+	var url = "https://webman2020.github.io/week15/index.html?List=" + ShoppingList;
 
 	//	replace with your NEW Bit.ly TOKEN
-	var accessToken = "9b581ed4b140975008856f05f396a50dba9689ae";
+	var AccessToken = "9b581ed4b140975008856f05f396a50dba9689ae";
 
-	var params = { "long_url" : URL };
+	var params = { "long_url" : url };
 
 	$.ajax({
-		URL: "https://api-ssl.bitly.com/v4/shorten",
+		url: "https://api-ssl.bitly.com/v4/shorten",
 		cache: false,
 		dataType: "json",
 		method: "POST",
 		contentType: "application/json",
 		beforeSend: function (xhr) {
-			xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
+			xhr.setRequestHeader("Authorization", "Bearer " + AccessToken);
 		},
 		data: JSON.stringify(params)
 	}).done(function(data) {
@@ -87,8 +87,8 @@ function PassList() {
 		document.getElementById("ShareList").innerHTML = "The URL to share the list:<br /><span class=\"Red01\">" + data.link + "</span>";
 		CopyToClipBoard(data.link);
 	}).fail(function(data) {
-		document.getElementById("ShareList").innerHTML = "The URL to share the list:<br /><span class=\"Red01\">" + URL + "</span>";
-		CopyToClipBoard(URL);
+		document.getElementById("ShareList").innerHTML = "The URL to share the list:<br /><span class=\"Red01\">" + url + "</span>";
+		CopyToClipBoard(url);
 	});
 }
 
@@ -165,7 +165,7 @@ function PopulateShoppingListonload() {
 	//	remove unwanted chars and format
 	y = RemoveUnwanted(y); 
 
-	//	spit array by comma %2C
+	//	v4.1 get URL
 	var GetURLListValue = Get("List");
 
 	if (GetURLListValue) {
@@ -192,6 +192,7 @@ function RemoveUnwanted(str) {
 
 			str = str.replace(/%20/g, "");		*/
 
+		str = str.replace(/%21/g, "!");
 		str = str.replace(/%24/g, "$"); 
 		str = str.replace(/%7C/g, " | ");
 		return str.replace(/[^\x20-\x7E]/g, "");
