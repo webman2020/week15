@@ -52,9 +52,7 @@ function PassList() {
 	var url = "https://webman2020.github.io/week15/index.html?list=" + ShoppingList;
 
 	//	replace with your NEW Bit.ly TOKEN
-	//	var accessToken = "81f621fe719173e36cb24f0f61f31843afce8114";
-
-	var accessToken = "e180195e32a63a1659badb18ee75efb6f7d8e837";
+	var accessToken = "9b581ed4b140975008856f05f396a50dba9689ae";
 
 	var params = { "long_url" : url };
 
