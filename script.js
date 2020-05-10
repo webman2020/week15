@@ -169,7 +169,7 @@ function PopulateShoppingListonload() {
 	var GetURLListValue = Get("List");
 
 	if (GetURLListValue) {
-		GetURLListValue = remove_unwanted(GetURLListValue);
+		GetURLListValue = RemoveUnwanted(GetURLListValue);
 		GetURLListValue = GetURLListValue.split(',');
 		ShoppingList = GetURLListValue;
 	} else if (y) {
