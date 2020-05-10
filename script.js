@@ -20,7 +20,7 @@ function WhenLoad()	{
 	About();
 	PopulateShoppingListonload();
 	DisplayShoppingLists();
-	ttt = setTimeout("ClearFocus()", 1500);
+	ClearFocus();
 }
 
 
@@ -88,7 +88,7 @@ function PassList() {
 		CopyToClipBoard(data.link);
 	}).fail(function(data) {
 		document.getElementById("ShareList").innerHTML = "The URL to share the list:<br /><span class=\"Red01\">" + url + "</span>";
-		CopyToClipBoard(url);
+		CopyToClipBoard(URL);
 	});
 }
 
