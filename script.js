@@ -259,7 +259,7 @@ var TheRow = "";
 var arrayLength = shoppinglist.length;
 for (var i = 0; i < shoppinglist.length; i++) {
   //v 3.1 change button name to btndelete
-var btndelete =  ' <input class="button" id="remove" name="delete" type="button" value="Remove" onclick="deleteShoppinglists(' + i + ')" />';
+var btndelete =  ' <input class="button" id="remove" name="delete" type="button" value="Remove Item" onclick="deleteShoppinglists(' + i + ')" />';
 var btnupdate =  ' <input class="button" name="edit" type="button" value="Edit Item" onclick="changeShoppinglist(' + i + ')" />';
 //v 3.1 add edit button using below i index & name it btnpdate
 var arrays = shoppinglist[i];
@@ -292,7 +292,7 @@ var TheRow = "";
 var arrayLength = addtocart.length;
 for (var i = 0; i < arrayLength; i++) {
   //v 3.1 change button name to btndelete
-var btndelete =  ' <input class="button" id="remove" name="delete" type="button" value="Remove" onclick="deleteShoppingCart(' + i + ')" />';
+var btndelete =  ' <input class="button" id="remove" name="delete" type="button" value="Remove Item" onclick="deleteShoppingCart(' + i + ')" />';
 //v 3.1 add edit button using below i index & name it btnpdate
 var btnupdate =  ' <input class="button" name="edit" type="button" value="Edit Item" onclick="changeShoppingCart(' + i + ')" />';
 var arrays = addtocart[i];
@@ -304,14 +304,14 @@ TheList += TheRow;
 }
 if (arrayLength > 0)
 {
-MyCart.style.paddingTop = "20px";
+Labels.style.paddingTop = "20px";
   document.getElementById("labels").innerHTML = 'Items Purchased:';
   document.getElementById("MyCart").innerHTML = '<ul>' + TheList + '</ul>';
 }else{
-MyCart.style.paddingTop = "0";
+Labels.style.paddingTop = "0";
   document.getElementById("labels").innerHTML = '';
   document.getElementById("MyCart").innerHTML = '';
-    
+
 }
 }
 
