@@ -1,13 +1,11 @@
-//v3.4 Add popup describing app when visitors load webpage the first time
 window.onload = function() {
-    alert("Welcome to 'Shopping List' App!\n\nCreated by Rock Valley College\n**Javascript(Web233) Students**\n\nQuestions?\nemail Professor Chuck Konkol\nc.konkol@rockvalleycollege.edu\n\nRegister @ RockValleyCollege.edu");
+    about();
     populateshoppinglistonload();
     displayShoppinglists();
     clearFocus();
+     PutDate();
 };
 
-//v 4.0 save / get array via cookies
-//v 4.0 read cookie on load and display
 
 //v4.1 get values via URL
 function get(name){
@@ -21,13 +19,21 @@ function get(name){
     if(num>=0) return url.substr(0,num);
     if(num<0)  return url;
 }
+function PutDate() {
+	var d = new Date();
+	var n = d.toLocaleDateString();
+	document.getElementById("Date").innerHTML = "Current date: <span class=\"Hilite\">" + n + "</span>";
+}
 //v4.1 ShareList via bitly api
 function passlist() {
-
-    var url = "https://webman2020.github.io/week15/index.html?list="+ shoppinglist;
-    var accessToken = "9b581ed4b140975008856f05f396a50dba9689ae";
+	var url = "https://webman2020.github.io/week15/index.html?list="+ shoppinglist;
+	var accessToken = "9b581ed4b140975008856f05f396a50dba9689ae";
 
     var params = {
+        "long_url" : url           
+    };
+
+   var params = {
         "long_url" : url           
     };
 
@@ -50,27 +56,31 @@ function passlist() {
 		copyToClipboard(URL);
 	});
 }
-//vFinal share function
-function share() { passlist(); }
 
-//Copy URL 
+//v4.1 share function
+function share()
+{
+   passlist();
+}
+//v4.1 prompt message to copy URL
 function copyToClipboard(text) {
-  var passbyurl = document.createElement("textarea");
+  var passbyurl = document.createElement('textarea');
   passbyurl.value = text;
   document.body.appendChild(passbyurl);
-  passbyurl.focus();
   passbyurl.select();
-  document.execCommand("copy");
+  document.execCommand('copy');
   document.body.removeChild(passbyurl);
   alert("URL has been copied. Ready to share: " + text);
-  //window.prompt("Copy & Share List!", text);
-    
 }
 
 function about()
 {
-    alert("Welcome to 'Shopping List' App!\n\nCreated by Rock Valley College\n**Javascript(Web233) Students**\n\nQuestions?\nemail Professor Chuck Konkol\nc.konkol@rockvalleycollege.edu\n\nRegister @ RockValleyCollege.edu");
-    
+    alert("Thanks for using the \"e-Shopper: List Tracker\" App!\n\n" +
+			"Created by: Curt Dunmire\n" +
+			"Enrolled in: JavaScript Class (Web233), yr. 2020\n\n" +
+			"Questions about the JavaScript class can be directed to\n" +
+			"Professor Chuck Konkol at: c.konkol@rockvalleycollege.edu\n\n" +
+			"Register for classes @ RockValleyCollege.edu\n\n");
 }
 //read cookie and return
 function readCookie(name) {
@@ -85,19 +95,16 @@ function readCookie(name) {
 }
 
 //v. 4.0remove and format cookie
-function remove_unwanted(str) {
+function remove_unwanted(str) {  
+    
   if ((str===null) || (str===''))  
        return false;  
  else  
-   str = str.toString();
-    //clean space
+   str = str.toString();  
    str = str.replace(/%20/g, " ");
-    //clean !
-
-   str = str.replace(/%21/g, "!");
    str = str.replace(/%24/g, "$"); 
    str = str.replace(/%7C/g, " | ");
-   return str.replace(/[^\x20-\x7E]/g, '');  
+  return str.replace(/[^\x20-\x7E]/g, '');  
 }  
 
 
@@ -118,19 +125,18 @@ function delete_cookie(name) {
 }
 
 
-function populateshoppinglistonload() {
+function populateshoppinglistonload()
+{
   shoppinglist = [];
   addtocart = [];
-
   //load cookie into array
   var y = readCookie('konkollist');
-
   //remove unwanted chars and format
-  y = remove_unwanted(y);
+  y = remove_unwanted(y); 
+  //spit array by comma %2C
   
    //v 4.1 get URL
   var geturllistvalue = get("list");
-
     if (geturllistvalue) {
         geturllistvalue = remove_unwanted(geturllistvalue);
       geturllistvalue = geturllistvalue.split(',');
