@@ -272,10 +272,12 @@ TheList += TheRow;
 //v3.1 add Title
 if (arrayLength > 0)
 {
+MyList.style.paddingTop = "20px";
   document.getElementById("MyList").innerHTML = 'Shopping List:<ul>' + TheList + '</ul>';
   document.getElementById("sharebutton").innerHTML = btnsharelist;
 }else
 {
+MyList.style.paddingTop = "0";
   document.getElementById("MyList").innerHTML = ' ';
   document.getElementById("sharebutton").innerHTML = ' ';
     document.getElementById("sharelist").innerHTML = ' ';
@@ -302,9 +304,11 @@ TheList += TheRow;
 }
 if (arrayLength > 0)
 {
-  document.getElementById("labels").innerHTML = 'Purchased';
+MyCart.style.paddingTop = "20px";
+  document.getElementById("labels").innerHTML = 'Items Purchased:';
   document.getElementById("MyCart").innerHTML = '<ul>' + TheList + '</ul>';
 }else{
+MyCart.style.paddingTop = "0";
   document.getElementById("labels").innerHTML = '';
   document.getElementById("MyCart").innerHTML = '';
     
