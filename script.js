@@ -272,7 +272,7 @@ TheList += TheRow;
 //v3.1 add Title
 if (arrayLength > 0)
 {
-  document.getElementById("MyList").innerHTML = '<ul>' + TheList + '</ul>';
+  document.getElementById("MyList").innerHTML = 'Shopping List:<ul>' + TheList + '</ul>';
   document.getElementById("sharebutton").innerHTML = btnsharelist;
 }else
 {
