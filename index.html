@@ -62,8 +62,9 @@ value="&bull;&bull;&bull; About &bull;&bull;&bull;" onclick="about()" /></p>
 <form onsubmit="return false;">
 <span class="InputName">Item:</span><input type="text" id="item" name="item" 
 onkeydown="if (event.keyCode == 13) { document.getElementById('btnSubmit').click(); }" 
-maxlength="18" placeholder="enter item (18 characters max.)" /><input class="button" name="submit" 
-id="btnSubmit" type="button" value="+Add" onclick="addShoppinglist(item.value)" />
+maxlength="18" placeholder="enter item (18 characters max.)" />
+<input name="submit" id="btnSubmit" type="button" value="+Add" 
+onclick="addShoppinglist(item.value)" />
 </form>
 
 <p id="MyList"></p>
@@ -74,8 +75,8 @@ id="btnSubmit" type="button" value="+Add" onclick="addShoppinglist(item.value)" 
 
 <div class="CtrAbout">
 <p id="sharebutton"></p>
-<p id="AboutButton"><input class="button" id="About" type="button" 
-value="&bull;&bull; About &bull;&bull;" onclick="About()" /></p>
+<p id="AboutButton"><input id="About" type="button" 
+value="&bull;&bull; About &bull;&bull;" onclick="about()" /></p>
 </div>
 
 <p class="DateControl"><span class="DateControl2" id="Date"></span></p>
